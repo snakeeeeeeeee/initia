@@ -100,6 +100,12 @@ function install_node() {
     git checkout v0.4.3
     
     make build
+
+    #配置预言机启用
+    sed -i -e 's/^enabled = "false"/enabled = "true"/' \
+       -e 's/^oracle_address = ""/oracle_address = "127.0.0.1:8080"/' \
+       -e 's/^client_timeout = "2s"/client_timeout = "500ms"/' \
+       -e 's/^metrics_enabled = "false"/metrics_enabled = "false"/' $HOME/.initia/config/app.toml
     
     pm2 start initiad -- start && pm2 save && pm2 startup
     pm2 start ./build/slinky -- --oracle-config-path ./config/core/oracle.json --market-map-endpoint 0.0.0.0:9090
