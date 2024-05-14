@@ -191,14 +191,6 @@ initiad tx mstaking create-validator \
   --gas-adjustment=1.4
 }
 
-EOF
-    initiad tx staking create-validator $HOME/validator.json --node $initiad_RPC_PORT \
-    --from=wallet \
-    --chain-id=initia \
-    --fees 10000amf
-}
-
-
 # 给自己地址验证者质押
 function delegate_self_validator() {
 read -p "请输入质押代币数量,比如你有1个amf,请输入1000000，以此类推: " math
