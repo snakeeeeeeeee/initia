@@ -13,15 +13,15 @@ function install_nodejs_and_npm() {
         echo "Node.js 已安装"
     else
         echo "Node.js 未安装，正在安装..."
-        curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
-        sudo apt-get install -y nodejs
+        curl -fsSL https://deb.nodesource.com/setup_16.x | bash -
+        apt-get install -y nodejs
     fi
 
     if command -v npm > /dev/null 2>&1; then
         echo "npm 已安装"
     else
         echo "npm 未安装，正在安装..."
-        sudo apt-get install -y npm
+        apt-get install -y npm
     fi
 }
 
@@ -52,13 +52,13 @@ function install_node() {
     install_pm2
 
     # 更新和安装必要的软件
-    sudo apt update && sudo apt upgrade -y
-    sudo apt install -y curl iptables build-essential git wget jq make gcc nano tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libleveldb-dev lz4 snapd
+    apt update && apt upgrade -y
+    apt install -y curl iptables build-essential git wget jq make gcc nano tmux htop nvme-cli pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip libleveldb-dev lz4 snapd
 
     # 安装 Go
     if ! check_go_installation; then
-        sudo rm -rf /usr/local/go
-        curl -L https://go.dev/dl/go1.22.0.linux-amd64.tar.gz | sudo tar -xzf - -C /usr/local
+        rm -rf /usr/local/go
+        curl -L https://go.dev/dl/go1.22.0.linux-amd64.tar.gz | tar -xzf - -C /usr/local
         echo 'export PATH=$PATH:/usr/local/go/bin:$HOME/go/bin' >> $HOME/.bash_profile
         source $HOME/.bash_profile
         go version
@@ -73,7 +73,6 @@ function install_node() {
 
     # 配置initiad
     initiad init "Moniker" --chain-id initiation-1
-    
 
     # 获取初始文件和地址簿
     wget -O $HOME/.initia/config/genesis.json https://initia.s3.ap-southeast-1.amazonaws.com/initiation-1/genesis.json
@@ -83,7 +82,6 @@ function install_node() {
     # 配置节点
     PEERS="40d3f977d97d3c02bd5835070cc139f289e774da@168.119.10.134:26313,841c6a4b2a3d5d59bb116cc549565c8a16b7fae1@23.88.49.233:26656,e6a35b95ec73e511ef352085cb300e257536e075@37.252.186.213:26656,2a574706e4a1eba0e5e46733c232849778faf93b@84.247.137.184:53456,ff9dbc6bb53227ef94dc75ab1ddcaeb2404e1b0b@178.170.47.171:26656,edcc2c7098c42ee348e50ac2242ff897f51405e9@65.109.34.205:36656,07632ab562028c3394ee8e78823069bfc8de7b4c@37.27.52.25:19656,028999a1696b45863ff84df12ebf2aebc5d40c2d@37.27.48.77:26656,140c332230ac19f118e5882deaf00906a1dba467@185.219.142.119:53456,1f6633bc18eb06b6c0cab97d72c585a6d7a207bc@65.109.59.22:25756,065f64fab28cb0d06a7841887d5b469ec58a0116@84.247.137.200:53456,767fdcfdb0998209834b929c59a2b57d474cc496@207.148.114.112:26656,093e1b89a498b6a8760ad2188fbda30a05e4f300@35.240.207.217:26656,12526b1e95e7ef07a3eb874465662885a586e095@95.216.78.111:26656"
     sed -i 's|^persistent_peers *=.*|persistent_peers = "'$PEERS'"|' $HOME/.initia/config/config.toml
-
 
     # 配置端口
     node_address="tcp://localhost:53457"
@@ -121,7 +119,6 @@ function install_node() {
     pm2 restart initiad
 
     echo '====================== 安装完成,请退出脚本后执行 source $HOME/.bash_profile 以加载环境变量==========================='
-    
 }
 
 # 查看initia 服务状态
@@ -181,37 +178,33 @@ function add_validator() {
     
     read -p "请输入您的验证者详情（例如'吊毛资本'）: " details
 
-    read -p "请输入您的想绑定的代币数量: " math
+    read -p "请输入您想绑定的代币数量: " math
 
-
-initiad tx mstaking create-validator \
-  --amount=${math}stake \
-  --pubkey=$(initiad tendermint show-validator) \
-  --moniker=$validator_name \
-  --chain-id=initiation-1 \
-  --commission-rate=0.05 \
-  --commission-max-rate=0.10 \
-  --commission-max-change-rate=0.01 \
-  --from=$wallet_name \
-  --identity="" \
-  --website="" \
-  --details="$details" \
+    initiad tx mstaking create-validator \
+        --amount=${math}stake \
+        --pubkey=$(initiad tendermint show-validator) \
+        --moniker=$validator_name \
+        --chain-id=initiation-1 \
+        --commission-rate=0.05 \
+        --commission-max-rate=0.10 \
+        --commission-max-change-rate=0.01 \
+        --from=$wallet_name \
+        --identity="" \
+        --website="" \
+        --details="$details"
 }
 
 # 给自己地址验证者质押
 function delegate_self_validator() {
-read -p "请输入质押代币数量,比如你有1个amf,请输入1000000，以此类推: " math
-read -p "请输入钱包名称: " wallet_name
-initiad tx staking delegate $(initiad keys show $wallet_name --bech val -a)  ${math}stake --from $wallet_name --chain-id=initiation-1 --gas=auto --gas-adjustment=1.4 --node $initiad_RPC_PORT  -y
-
+    read -p "请输入质押代币数量,比如你有1个amf,请输入1000000，以此类推: " math
+    read -p "请输入钱包名称: " wallet_name
+    initiad tx staking delegate $(initiad keys show $wallet_name --bech val -a) ${math}stake --from $wallet_name --chain-id=initiation-1 --gas=auto --gas-adjustment=1.4 --node $initiad_RPC_PORT -y
 }
 
 function unjail() {
-read -p "请输入钱包名称: " wallet_name
-initiad tx slashing unjail --from $wallet_name --fees=10000amf --chain-id=initiation-1 --node $initiad_RPC_PORT
-
+    read -p "请输入钱包名称: " wallet_name
+    initiad tx slashing unjail --from $wallet_name --fees=10000amf --chain-id=initiation-1 --node $initiad_RPC_PORT
 }
-
 
 # 主菜单
 function main_menu() {
@@ -234,9 +227,9 @@ function main_menu() {
         echo "8. 卸载节点"
         echo "9. 设置快捷键"  
         echo "10. 创建验证者"  
-        echo "11. 给自己质押" 
+        echo "11. 给自己质押"
         echo "12. 释放出监狱"
-        read -p "请输入选项（1-11）: " OPTION
+        read -p "请输入选项（1-12）: " OPTION
 
         case $OPTION in
         1) install_node ;;
@@ -256,7 +249,6 @@ function main_menu() {
         echo "按任意键返回主菜单..."
         read -n 1
     done
-    
 }
 
 # 显示主菜单
