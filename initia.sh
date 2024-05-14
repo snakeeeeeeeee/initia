@@ -101,14 +101,22 @@ function install_node() {
     
     make build
 
-    #配置预言机启用
+    # 配置预言机启用
     sed -i -e 's/^enabled = "false"/enabled = "true"/' \
        -e 's/^oracle_address = ""/oracle_address = "127.0.0.1:8080"/' \
        -e 's/^client_timeout = "2s"/client_timeout = "500ms"/' \
        -e 's/^metrics_enabled = "false"/metrics_enabled = "false"/' $HOME/.initia/config/app.toml
     
     pm2 start initiad -- start && pm2 save && pm2 startup
+
+    pm2 stop initiad
+    
+    # 配置快照
+    wget -O initia_113153.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_113153.tar.lz4 --inet4-only
+    lz4 -d -c ./initia_113153.tar.lz4 | tar -xf - -C $HOME/.initia
+    
     pm2 start ./build/slinky -- --oracle-config-path ./config/core/oracle.json --market-map-endpoint 0.0.0.0:9090
+    pm2 restart initiad
 
     echo '====================== 安装完成,请退出脚本后执行 source $HOME/.bash_profile 以加载环境变量==========================='
     
