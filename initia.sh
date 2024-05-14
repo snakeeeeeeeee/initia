@@ -165,17 +165,30 @@ function check_sync_status() {
 
 # 创建验证者
 function add_validator() {
-    read -p "请输入你的验证者名称: " validator_name
-    sudo tee ~/validator.json > /dev/null <<EOF
-{
-  "pubkey": $(initiad tendermint show-validator),
-  "amount": "1000000amf",
-  "moniker": "$validator_name",
-  "details": "dalubi",
-  "commission-rate": "0.10",
-  "commission-max-rate": "0.20",
-  "commission-max-change-rate": "0.01",
-  "min-self-delegation": "1"
+    read -p "请输入您的钱包名称: " wallet_name
+    
+    read -p "请输入您想设置的验证者的名字: " validator_name
+    
+    read -p "请输入您的验证者详情（例如'吊毛资本'）: " details
+
+    read -p "请输入您的想绑定的代币数量: " math
+
+
+initiad tx mstaking create-validator \
+  --amount=${math}stake \
+  --pubkey=$(initiad tendermint show-validator) \
+  --moniker=$validator_name \
+  --chain-id=initiation-1 \
+  --commission-rate=0.05 \
+  --commission-max-rate=0.10 \
+  --commission-max-change-rate=0.01 \
+  --min-self-delegation=1 \
+  --from=$wallet_name \
+  --identity="" \
+  --website="" \
+  --details="$details" \
+  --gas=auto \
+  --gas-adjustment=1.4
 }
 
 EOF
@@ -190,7 +203,7 @@ EOF
 function delegate_self_validator() {
 read -p "请输入质押代币数量,比如你有1个amf,请输入1000000，以此类推: " math
 read -p "请输入钱包名称: " wallet_name
-initiad tx staking delegate $(initiad keys show $wallet_name --bech val -a)  ${math}amf --from $wallet_name --chain-id=initiation-1 --fees 10000amf --node $initiad_RPC_PORT  -y
+initiad tx staking delegate $(initiad keys show $wallet_name --bech val -a)  ${math}amf --from $wallet_name --chain-id=initiation-1 --gas=auto --gas-adjustment=1.4 --node $initiad_RPC_PORT  -y
 
 }
 
