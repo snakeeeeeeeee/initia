@@ -113,7 +113,9 @@ function install_node() {
     
     # 配置快照
     wget -O initia_113153.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_113153.tar.lz4 --inet4-only
+    initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
     lz4 -d -c ./initia_113153.tar.lz4 | tar -xf - -C $HOME/.initia
+    cp ~/.initia/priv_validator_state.json  ~/.initia/data/priv_validator_state.json
     
     pm2 start ./build/slinky -- --oracle-config-path ./config/core/oracle.json --market-map-endpoint 0.0.0.0:9090
     pm2 restart initiad
