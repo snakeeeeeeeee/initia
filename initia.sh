@@ -180,7 +180,7 @@ function add_validator() {
 
     read -p "请输入您想绑定的代币数量: " math
 
-    initiad tx mstaking create-validator \
+    initiad tx mstaking create-validator --node $initiad_RPC_PORT \
         --amount=${math}stake \
         --pubkey=$(initiad tendermint show-validator) \
         --moniker=$validator_name \
