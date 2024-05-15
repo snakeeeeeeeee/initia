@@ -115,7 +115,7 @@ function install_node() {
     lz4 -d -c ./initia_113153.tar.lz4 | tar -xf - -C $HOME/.initia
     cp ~/.initia/priv_validator_state.json  ~/.initia/data/priv_validator_state.json
     
-    pm2 start ./build/slinky -- --oracle-config-path ./config/core/oracle.json --market-map-endpoint 0.0.0.0:9090
+    pm2 start ./build/slinky -- --oracle-config-path ./config/core/oracle.json --market-map-endpoint 0.0.0.0:53490
     pm2 restart initiad
 
     echo '====================== 安装完成,请退出脚本后执行 source $HOME/.bash_profile 以加载环境变量==========================='
