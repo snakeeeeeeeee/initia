@@ -186,7 +186,7 @@ function add_validator() {
 function delegate_self_validator() {
     read -p "请输入质押代币数量,比如你有1个amf,请输入1000000，以此类推: " math
     read -p "请输入钱包名称: " wallet_name
-    initiad tx staking delegate $(initiad keys show $wallet_name --bech val -a) ${math}stake --from $wallet_name --chain-id=initiation-1 --gas=auto --gas-adjustment=1.4 --node $initiad_RPC_PORT -y
+    initiad tx staking delegate $(initiad keys show wallet --bech val -a) ${mate}uinit --from $wallet_name --chain-id initiation-1 --gas-adjustment 1.4 --gas auto --gas-prices 0.15uinit --node $initiad_RPC_PORT -y
 }
 
 function unjail() {
