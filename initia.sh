@@ -177,10 +177,9 @@ function add_validator() {
     
     read -p "请输入您的验证者详情（例如'吊毛资本'）: " details
 
-    read -p "请输入您想绑定的代币数量: " math
 
     initiad tx mstaking create-validator --node $initiad_RPC_PORT \
-        --amount=${math}stake \
+        --amount=1000000uinit \
         --pubkey=$(initiad tendermint show-validator) \
         --moniker=$validator_name \
         --chain-id=initiation-1 \
@@ -191,6 +190,9 @@ function add_validator() {
         --identity="" \
         --website="" \
         --details="$details"
+        --gas-adjustment 1.4 \
+        --gas auto \
+        --gas-prices 0.15uinit \
 }
 
 # 给自己地址验证者质押
