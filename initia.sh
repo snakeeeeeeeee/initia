@@ -189,9 +189,9 @@ function add_validator() {
         --from=$wallet_name \
         --identity="" \
         --website="" \
-        --details="$details"
-        --gas=2000000 
+        --details="$details" \
         --fees=300000uinit
+  
 }
 
 # 给自己地址验证者质押
