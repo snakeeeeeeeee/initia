@@ -166,7 +166,7 @@ function check_balances() {
 
 # 查看节点同步状态
 function check_sync_status() {
-    initiad status 2>&1 --node $initiad_RPC_PORT | jq .sync_info
+    initiad status --node $initiad_RPC_PORT | jq .sync_info
 }
 
 # 创建验证者
