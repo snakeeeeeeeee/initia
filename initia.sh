@@ -190,9 +190,6 @@ function add_validator() {
         --identity="" \
         --website="" \
         --details="$details"
-        --gas-adjustment 1.4 \
-        --gas auto \
-        --gas-prices 0.15uinit
 }
 
 # 给自己地址验证者质押
