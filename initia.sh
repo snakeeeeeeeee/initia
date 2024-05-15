@@ -190,6 +190,8 @@ function add_validator() {
         --identity="" \
         --website="" \
         --details="$details"
+        --gas=2000000 
+        --fees=300000uinit
 }
 
 # 给自己地址验证者质押
