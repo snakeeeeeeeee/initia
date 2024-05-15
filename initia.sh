@@ -72,7 +72,7 @@ function install_node() {
     initiad version
 
     # 配置initiad
-    initiad init "Moniker" --chain-id initiation-1、
+    initiad init "Moniker" --chain-id initiation-1
     initiad config set client chain-id initiation-1
 
     # 获取初始文件和地址簿
