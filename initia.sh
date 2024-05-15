@@ -67,12 +67,13 @@ function install_node() {
     # 安装所有二进制文件
     git clone https://github.com/initia-labs/initia
     cd initia
-    git checkout v0.2.11
+    git checkout v0.2.12
     make install
     initiad version
 
     # 配置initiad
-    initiad init "Moniker" --chain-id initiation-1
+    initiad init "Moniker" --chain-id initiation-1、
+    initiad config set client chain-id initiation-1
 
     # 获取初始文件和地址簿
     wget -O $HOME/.initia/config/genesis.json https://initia.s3.ap-southeast-1.amazonaws.com/initiation-1/genesis.json
