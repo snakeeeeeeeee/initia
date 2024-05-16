@@ -196,6 +196,13 @@ function unjail() {
     initiad tx slashing unjail --from $wallet_name --fees=10000amf --chain-id=initiation-1 --node $initiad_RPC_PORT
 }
 
+# 导出验证者key
+function export_priv_validator_key() {
+    echo "====================请将下方所有内容备份到自己的记事本或者excel表格中记录==========================================="
+    cat ~/.initia/config/priv_validator_key.json
+    
+}
+
 # 主菜单
 function main_menu() {
     while true; do
@@ -219,6 +226,7 @@ function main_menu() {
         echo "10. 创建验证者"  
         echo "11. 给自己质押"
         echo "12. 释放出监狱"
+        echo "13. 备份验证者私钥" 
         read -p "请输入选项（1-12）: " OPTION
 
         case $OPTION in
@@ -234,6 +242,7 @@ function main_menu() {
         10) add_validator ;;
         11) delegate_self_validator ;;
         12) unjail ;;
+        13) export_priv_validator_key ;;
         *) echo "无效选项。" ;;
         esac
         echo "按任意键返回主菜单..."
