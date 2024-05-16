@@ -112,9 +112,9 @@ function install_node() {
     
     # 配置快照
     sudo apt install lz4 -y
-    wget https://rpc-initia-testnet.trusted-point.com/latest_snapshot.tar.lz4 -O latest_snapshot.tar.lz4
+    wget -O initia_150902.tar.lz4 https://snapshots.polkachu.com/testnet-snapshots/initia/initia_150902.tar.lz4 --inet4-only
     initiad tendermint unsafe-reset-all --home $HOME/.initia --keep-addr-book
-    lz4 -d -c ./latest_snapshot.tar.lz4 | tar -xf - -C $HOME/.initia
+    lz4 -c -d initia_150902.tar.lz4  | tar -x -C $HOME/.initia
     
     pm2 start ./build/slinky -- --oracle-config-path ./config/core/oracle.json --market-map-endpoint 0.0.0.0:53490
     pm2 restart initiad
