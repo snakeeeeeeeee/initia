@@ -203,6 +203,24 @@ function export_priv_validator_key() {
     
 }
 
+function update_node() {
+cd $HOME
+cd initia
+git fetch --tags
+latest_tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+if [ -z "$latest_tag" ]; then
+    echo "未找到最新的标签。"
+    exit 1
+fi
+
+git checkout $latest_tag
+make install
+pm2 restart initiad
+
+echo "升级到最新版本 $latest_tag 完成。"
+
+}
+
 # 主菜单
 function main_menu() {
     while true; do
@@ -227,6 +245,7 @@ function main_menu() {
         echo "11. 给自己质押"
         echo "12. 释放出监狱"
         echo "13. 备份验证者私钥" 
+        echo "14. 升级节点" 
         read -p "请输入选项（1-12）: " OPTION
 
         case $OPTION in
@@ -243,6 +262,7 @@ function main_menu() {
         11) delegate_self_validator ;;
         12) unjail ;;
         13) export_priv_validator_key ;;
+        14) update_node ;;
         *) echo "无效选项。" ;;
         esac
         echo "按任意键返回主菜单..."
